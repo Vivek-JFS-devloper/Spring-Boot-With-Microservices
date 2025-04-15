@@ -1,0 +1,5 @@
+package in.ramesh.repository;
+
+public interface QuestionRepository {
+
+}

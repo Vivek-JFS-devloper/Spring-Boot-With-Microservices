@@ -1,0 +1,22 @@
+spring.application.name=QuestionService
+
+server.port=9090
+
+spring.datasource.url=jdbc:mysql://localhost:3306/learning
+spring.datasource.username=root
+spring.datasource.password=R7301@amesh#
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+#Register this sevice with eureka
+
+eureka.client.register-with-eureka=true
+
+# Fetch other service from Eureka
+
+eureka.client.fetch-registry=true
+
+# Prefer IP address over hostname in regisration
+
+eureka.instance.prefer-ip-address=true

@@ -1,0 +1,60 @@
+package in.ramesh.service;
+
+import java.util.List;import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import in.ramesh.entity.Quiz;
+import in.ramesh.repository.QuizRepository;
+
+@Service
+public class QuizServiceImpl implements QuizService {
+
+	@Autowired
+	private QuizRepository quizRepository;
+	
+	@Autowired
+	private QuestionClient questionClient;
+
+	@Override
+	public Quiz add(Quiz quiz) {
+		// TODO Auto-generated method stub
+		return quizRepository.save(quiz);
+	}
+
+	@Override
+	public List<Quiz> getAllQuizs() {
+		// TODO Auto-generated method stub
+		
+		List<Quiz> allQuiz = quizRepository.findAll();
+		
+		allQuiz.stream().map((quiz)-> {
+			quiz.setQuestions()
+		}
+		
+		return quizRepository.findAll();
+	}
+
+	@Override
+	public Quiz getQuiz(Long id) {
+		// TODO Auto-generated method stub
+		return quizRepository.findById(id).orElseThrow(() -> new RuntimeException("No records available"));
+	}
+
+	@Override
+	public void deleteQuizById(Long id) {
+
+		if (!quizRepository.existsById(id)) {
+			throw new RuntimeException("Quiz not found with Id " + id);
+		}
+
+		quizRepository.deleteById(id);
+	}
+
+	@Override
+	public void deleteAllQuiz() {
+		
+		quizRepository.deleteAll();
+	}
+}

@@ -1,0 +1,64 @@
+package in.ramesh.service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import in.ramesh.entity.Quiz;
+import in.ramesh.exception.ResourceNotFoundException;
+import in.ramesh.repository.QuizRepository;
+
+@Service
+public class QuizServiceImpl implements QuizService {
+
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private QuestionClient questionClient;
+
+    // Create a new quiz
+    @Override
+    public Quiz add(Quiz quiz) {
+        return quizRepository.save(quiz);
+    }
+
+    // Get all quizzes with their associated questions (fetched via FeignClient)
+    @Override
+    public List<Quiz> getAllQuizs() {
+        List<Quiz> allQuiz = quizRepository.findAll();
+
+        // Fetch and attach questions for each quiz via FeignClient
+        return allQuiz.stream().map(quiz -> {
+            quiz.setQuestions(questionClient.getQuestionsOfQuiz(quiz.getId()));
+            return quiz;
+        }).collect(Collectors.toList());
+    }
+
+    // Get a single quiz by ID with questions
+    @Override
+    public Quiz getQuiz(Long id) {
+        Quiz quiz = quizRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz not found with ID: " + id));
+
+        quiz.setQuestions(questionClient.getQuestionsOfQuiz(id));
+        return quiz;
+    }
+
+    // Delete quiz by ID
+    @Override
+    public void deleteQuizById(Long id) {
+        if (!quizRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Quiz not found with ID: " + id);
+        }
+        quizRepository.deleteById(id);
+    }
+
+    // Delete all quizzes
+    @Override
+    public void deleteAllQuiz() {
+        quizRepository.deleteAll();
+    }
+}

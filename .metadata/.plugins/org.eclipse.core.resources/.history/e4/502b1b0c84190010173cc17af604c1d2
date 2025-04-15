@@ -1,0 +1,14 @@
+package in.ramesh;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@EnableEurekaClient
+public class QuestionServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(QuestionServiceApplication.class, args);
+	}
+
+}

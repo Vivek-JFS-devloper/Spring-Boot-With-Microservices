@@ -1,0 +1,46 @@
+package in.ramesh.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import in.ramesh.entity.Question;
+import in.ramesh.service.QuestionService;
+
+@RestController
+@RequestMapping("/questions")
+public class QuestionController {
+
+    @Autowired
+    private QuestionService questionService;
+
+    // Add a new question
+    @PostMapping
+    public ResponseEntity<Question> addQuestion(@RequestBody Question question) {
+        if (question == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Question savedQuestion = questionService.add(question);
+        return ResponseEntity.ok(savedQuestion);
+    }
+
+    // Get all questions
+    @GetMapping
+    public ResponseEntity<List<Question>> getAllQuestions() {
+        List<Question> questions = questionService.getAllQuestions();
+        return ResponseEntity.ok(questions);
+    }
+
+    // Get a question by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+        try {
+            Question question = questionService.getQuestionById(id);
+            return ResponseEntity.ok(question);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}

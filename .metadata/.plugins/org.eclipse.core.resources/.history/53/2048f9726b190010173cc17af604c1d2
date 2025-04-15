@@ -1,0 +1,5 @@
+package in.ramesh.service;
+
+public interface QuestionService {
+
+}
